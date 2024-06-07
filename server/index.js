@@ -9,6 +9,7 @@ const connectDb = require('./config/connectDb');
 
 const app = express();
 
+// CONFIG
 if (process.env.NODE_ENV !== 'PRODUCTION') {
   dotenv.config({ path: './config/config.env' });
 }
@@ -20,6 +21,11 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// ROUTES IMPORT
+const userRoute = require('./routes/userRoute');
+
+app.use('/api/v1', userRoute);
 
 const PORT = process.env.PORT;
 

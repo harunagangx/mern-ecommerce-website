@@ -1,0 +1,141 @@
+const User = require('../models/userModel');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+const ErrorHandler = require('../utils/errorHandler');
+const sendCookie = require('../utils/sendCookie');
+const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+
+exports.createUser = catchAsyncErrors(async (req, res, next) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return next(new ErrorHandler('Please fill all fields', 204));
+  }
+
+  const user = await User.findOne({
+    $or: [{ username, email }],
+  });
+
+  if (user) {
+    if (user.username === username) {
+      return next(new ErrorHandler('username already exists', 401));
+    }
+    return next(new ErrorHandler('email already exists', 401));
+  }
+
+  const newUser = await User.create({
+    username: username,
+    email: email,
+    password: password,
+    role: req.body.role,
+  });
+
+  sendCookie(newUser, 201, res);
+});
+
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+  const { userId, password } = req.body;
+
+  const user = await User.findOne({
+    $or: [{ email: userId }, { username: userId }],
+  }).select('+password');
+
+  if (!user) {
+    return next(new ErrorHandler('user does not exists', 401));
+  }
+
+  // const isPasswordMatched = await user.comparePassword(password);
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler('password does not match'));
+  }
+
+  sendCookie(user, 201, res);
+
+  res.json({});
+});
+
+exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
+  res.cookie('token', null, {
+    expire: new Date(Date.now()),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Logged out',
+  });
+});
+
+exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.find().select('+password');
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+exports.getUserById = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler('user does not exists'), 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+exports.getCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new ErrorHandler('user does not exists', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+  const newUserData = {
+    username: req.body.username,
+    email: req.body.email,
+    password: hashedPassword,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user._id, newUserData);
+
+  if (!user) {
+    return next(new ErrorHandler('user does not exists', 404));
+  }
+
+  res.status(200).json(user);
+});
+
+exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    if (user.role === 'admin') {
+      return next(new ErrorHandler('cannot delete admin', 400));
+    }
+
+    await User.deleteOne({ _id: user._id });
+    res.status(200).json({
+      success: true,
+      message: 'delete successfully',
+    });
+  } else {
+    return next(new ErrorHandler('user does not exists', 404));
+  }
+});
