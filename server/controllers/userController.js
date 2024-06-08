@@ -125,17 +125,14 @@ exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
 exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
-  if (user) {
-    if (user.role === 'admin') {
-      return next(new ErrorHandler('cannot delete admin', 400));
-    }
-
-    await User.deleteOne({ _id: user._id });
-    res.status(200).json({
-      success: true,
-      message: 'delete successfully',
-    });
-  } else {
+  if (!user) {
     return next(new ErrorHandler('user does not exists', 404));
   }
+
+  await User.deleteOne({ _id: user._id });
+  
+  res.status(200).json({
+    success: true,
+    message: 'delete successfully',
+  });
 });
