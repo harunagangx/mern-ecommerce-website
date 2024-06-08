@@ -3,7 +3,6 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 const sendCookie = require('../utils/sendCookie');
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -52,8 +51,6 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   sendCookie(user, 201, res);
-
-  res.json({});
 });
 
 exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
@@ -119,7 +116,10 @@ exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('user does not exists', 404));
   }
 
-  res.status(200).json(user);
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
 
 exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
