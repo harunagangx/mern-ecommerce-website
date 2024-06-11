@@ -101,6 +101,12 @@ exports.getCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new ErrorHandler('user does not exists', 404));
+  }
+
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
@@ -110,15 +116,11 @@ exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
     password: hashedPassword,
   };
 
-  const user = await User.findByIdAndUpdate(req.user._id, newUserData);
-
-  if (!user) {
-    return next(new ErrorHandler('user does not exists', 404));
-  }
+  await User.findByIdAndUpdate(req.user._id, newUserData);
 
   res.status(200).json({
     success: true,
-    user,
+    message: 'update successfully',
   });
 });
 
@@ -130,7 +132,7 @@ exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
   }
 
   await User.deleteOne({ _id: user._id });
-  
+
   res.status(200).json({
     success: true,
     message: 'delete successfully',
