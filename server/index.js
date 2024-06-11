@@ -24,8 +24,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ROUTES IMPORT
 const userRoute = require('./routes/userRoute');
+const categoryRoute = require('./routes/categoryRoute');
 
 app.use('/api/v1', userRoute);
+app.use('/api/v1', categoryRoute);
 
 const PORT = process.env.PORT;
 
