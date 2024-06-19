@@ -6,6 +6,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const connectDb = require('./config/connectDb');
+const errorMiddleware = require('./middlewares/error');
 
 const app = express();
 
@@ -25,9 +26,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ROUTES IMPORT
 const userRoute = require('./routes/userRoute');
 const categoryRoute = require('./routes/categoryRoute');
+const productRoute = require('./routes/productRoute');
+const uploadRoute = require('./routes/uploadRoute');
+const orderRoute = require('./routes/orderRoute');
 
 app.use('/api/v1', userRoute);
 app.use('/api/v1', categoryRoute);
+app.use('/api/v1', productRoute);
+app.use('/api/v1', uploadRoute);
+app.use('/api/v1', orderRoute);
+
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT;
 
