@@ -20,7 +20,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllCategory = catchAsyncErrors(async (req, res, next) => {
-  const categories = await Category.find().populate('products');
+  const categories = await Category.find();
 
   res.status(200).json({
     success: true,
@@ -29,7 +29,7 @@ exports.getAllCategory = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getCategoryById = catchAsyncErrors(async (req, res, next) => {
-  const category = await Category.findById(req.params.id).populate('products');
+  const category = await Category.findById(req.params.id);
 
   if (!category) {
     return next(new ErrorHandler('category does not exist', 404));

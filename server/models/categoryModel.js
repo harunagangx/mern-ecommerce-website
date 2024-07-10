@@ -7,12 +7,12 @@ const categorySchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-    },
-  ],
+  // products: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Product',
+  //   },
+  // ],
 });
 
 const Category = mongoose.model('Category', categorySchema);

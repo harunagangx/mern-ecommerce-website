@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 
 const connectDb = require('./config/connectDb');
 const errorMiddleware = require('./middlewares/error');
@@ -35,6 +36,9 @@ app.use('/api/v1', categoryRoute);
 app.use('/api/v1', productRoute);
 app.use('/api/v1', uploadRoute);
 app.use('/api/v1', orderRoute);
+
+__dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 
 app.use(errorMiddleware);
 
