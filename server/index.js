@@ -12,9 +12,7 @@ const errorMiddleware = require('./middlewares/error');
 const app = express();
 
 // CONFIG
-if (process.env.NODE_ENV !== 'PRODUCTION') {
-  dotenv.config({ path: './config/config.env' });
-}
+dotenv.config({ path: './config/config.env' });
 
 connectDb();
 

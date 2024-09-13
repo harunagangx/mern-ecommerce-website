@@ -19,10 +19,22 @@ class ApiFeatures {
     return this;
   }
 
+  sort() {
+    if (this.queryStr.sort) {
+      const sortBy = this.queryStr.sort;
+
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort();
+    }
+
+    return this;
+  }
+
   filter() {
     const queryCopy = { ...this.queryStr };
 
-    const removeFields = ['keyword', 'page', 'limit'];
+    const removeFields = ['keyword', 'sort', 'page', 'limit'];
 
     removeFields.forEach((key) => delete queryCopy[key]);
 

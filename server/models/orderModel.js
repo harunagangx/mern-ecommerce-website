@@ -79,6 +79,7 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'Processing',
+    enum: ['Processing', 'Delivering', 'Delivered'],
   },
   deliveryAt: {
     type: Date,

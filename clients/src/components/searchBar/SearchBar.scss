@@ -1,0 +1,14 @@
+.searchBox {
+  border-bottom: 1px solid #fff;
+
+  input {
+    outline: none;
+    border: none;
+    color: #fff;
+    background-color: transparent;
+
+    &::placeholder {
+      color: #fff;
+    }
+  }
+}

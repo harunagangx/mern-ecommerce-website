@@ -1,0 +1,36 @@
+.product-card__wrapper {
+  .product-card__img {
+    padding: 10px 10px 5px 10px;
+    img {
+      border-radius: 10px;
+      
+      &:hover {
+        scale: 1.1;
+      }
+    }
+  }
+
+  .product-card__context {
+    padding: 5px 15px 5px 15px;
+
+    .product-card__title {
+      p {
+        color: var(--sm-text-color);
+        font-size: 1rem;
+      }
+
+      h4 {
+        color: var(--xl-text-color);
+        font-size: 1.6rem;
+      }
+    }
+
+    .product-card__bottom {
+      p {
+        color: var(--xl-text-color);
+        font-size: 1.6rem;
+        font-weight: var(--fw-500);
+      }
+    }
+  }
+}

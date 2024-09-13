@@ -10,9 +10,7 @@ const {
 
 const router = express.Router();
 
-router
-  .route('/admin/categories')
-  .get(isAuthenticatedUser, authorizeRole('admin'), getAllCategory);
+router.route('/categories').get(getAllCategory);
 
 router
   .route('/admin/category')

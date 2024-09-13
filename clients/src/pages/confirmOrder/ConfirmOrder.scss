@@ -1,0 +1,110 @@
+.confirm-order__wrapper {
+  display: grid;
+  grid-template-columns: 6fr 3fr;
+
+  & > div:last-child {
+    border-left: 1px solid rgba(0, 0, 0, 0.247);
+  }
+
+  .confirmShippingAreaBox,
+  .confirmCartItemsContainer {
+    margin: 2vmax;
+  }
+
+  .confirmShippingArea {
+    padding: 5vmax;
+    padding-bottom: 0%;
+    font-size: 18px;
+
+    h3 {
+      font-weight: var(--fw-700);
+    }
+  }
+
+  .confirmCartItems {
+    padding-bottom: 2vmax;
+
+    .confirmCartItemsContainer {
+      max-height: 20vmax;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+        background-color: #f5f5f5;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #000;
+      }
+
+      &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 1vmax 0 3vmax 0;
+
+        img {
+          width: 100px;
+          object-fit: contain;
+        }
+
+        h4 {
+          color: #575757;
+          margin: 0 2vmax;
+          width: 60%;
+          text-decoration: none;
+        }
+
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .orderSummaryArea {
+    padding: 7vmax;
+
+    .orderSummaryBox {
+      h3 {
+        text-align: center;
+        padding: 1vmax;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.267);
+      }
+
+      & > div > div {
+        display: flex;
+        justify-content: space-between;
+        margin: 2vmax 0;
+
+        p {
+          font-size: 17px;
+        }
+      }
+
+      .order-total {
+        padding: 2vmax 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.267);
+        font-size: 22px;
+      }
+
+      button {
+        width: 100%;
+        background-color: var(--brand-color);
+        color: #fafafa;
+        border: none;
+        padding: 1vmax;
+        font: 400 1vmax;
+
+        &:hover {
+          background-color: rgb(192, 71, 50);
+        }
+      }
+    }
+  }
+}

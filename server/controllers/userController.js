@@ -5,7 +5,9 @@ const sendCookie = require('../utils/sendCookie');
 const bcrypt = require('bcryptjs');
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, name } = req.body;
+
+  console.log(req.body);
 
   if (!username || !email || !password) {
     return next(new ErrorHandler('Please fill all fields', 204));
@@ -23,6 +25,7 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   const newUser = await User.create({
+    name: name,
     username: username,
     email: email,
     password: password,
@@ -43,8 +46,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('user does not exists', 401));
   }
 
-  // const isPasswordMatched = await user.comparePassword(password);
-  const isPasswordMatched = await bcrypt.compare(password, user.password);
+  const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
     return next(new ErrorHandler('password does not match'));
@@ -107,13 +109,10 @@ exports.updateCurrentUserDetails = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('user does not exists', 404));
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
   const newUserData = {
+    name: req.body.name,
     username: req.body.username,
     email: req.body.email,
-    password: hashedPassword,
   };
 
   await User.findByIdAndUpdate(req.user._id, newUserData);

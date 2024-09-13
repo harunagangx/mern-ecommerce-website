@@ -8,13 +8,19 @@ const {
   calculateTotalSales,
   calculateTotalSalesByDate,
   updateOrder,
+  deleteOrder,
 } = require('../controllers/orderController');
 
 const router = express.Router();
 
 router.route('/order').post(isAuthenticatedUser, createOrder);
 
-router.route('/order').get(isAuthenticatedUser, myOrders);
+router.route('/order/me').get(isAuthenticatedUser, myOrders);
+
+router
+  .route('/order/:id')
+  .get(getOrderById)
+  .delete(isAuthenticatedUser, deleteOrder);
 
 router
   .route('/admin/orders')
@@ -22,7 +28,6 @@ router
 
 router
   .route('/admin/order/:id')
-  .get(isAuthenticatedUser, authorizeRole('admin'), getOrderById)
   .put(isAuthenticatedUser, authorizeRole('admin'), updateOrder);
 
 router

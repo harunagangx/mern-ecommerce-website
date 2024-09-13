@@ -1,0 +1,50 @@
+.header__wrapper {
+  width: 100%;
+  padding: 30px 80px;
+  background-color: transparent;
+  overflow: hidden;
+  transition: background 0.3s ease-in;
+
+  &.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 25px 80px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fafafa;
+    z-index: 10;
+  }
+
+  .header__logo {
+    img {
+      width: 45px;
+      height: 45px;
+    }
+    h5 {
+      font-weight: 700;
+      margin-top: 7px;
+      letter-spacing: 1px;
+    }
+  }
+
+  .menu-item {
+    font-size: 1.2rem;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      font-weight: var(--fw-700);
+    }
+
+    .nav-active {
+      font-weight: var(--fw-700);
+    }
+  }
+
+  .nav-mobile-icon {
+    display: none;
+  }
+
+  .logout-icon {
+    cursor: pointer;
+  }
+}

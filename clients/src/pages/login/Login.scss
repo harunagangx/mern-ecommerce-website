@@ -1,0 +1,33 @@
+.login__wrapper {
+  width: 100vw;
+  height: 70vh;
+  max-width: 100%;
+}
+
+.login__box {
+  background-color: white;
+  width: 30vw;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  padding: 2vmax;
+
+  input {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+
+  .submitBtn {
+    background-color: var(--brand-color);
+    color: #fff;
+    border: none;
+  }
+
+  a {
+    color: var(--brand-color) !important;
+    text-decoration: underline !important;
+  }
+}

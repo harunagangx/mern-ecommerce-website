@@ -1,0 +1,35 @@
+.shipping__container {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+}
+
+.shipping__box {
+  background-color: white;
+  width: 30vw;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  padding: 2vmax;
+
+  .input__container {
+    width: 100%;
+
+    input {
+      width: 100%;
+      border: 1px solid #000;
+      padding: 10px 14px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--brand-color);
+    color: #fafafa;
+  }
+}

@@ -3,28 +3,6 @@ const Product = require('../models/productModel');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
-async function calPrices(orderItems) {
-  const itemsPrice = orderItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
-  const shippingFee = itemsPrice > 1000 ? 0 : 10;
-  const taxRate = 0.1;
-  const taxPrice = (itemsPrice * taxRate).toFixed(2);
-
-  const totalPrice = (itemsPrice + shippingFee + parseFloat(taxPrice)).toFixed(
-    2
-  );
-
-  return {
-    itemsPrice: itemsPrice.toFixed(2),
-    shippingFee: shippingFee.toFixed(2),
-    taxPrice,
-    totalPrice,
-  };
-}
-
 async function updateStock(id, quantity) {
   const product = await Product.findById(id);
 
@@ -34,10 +12,14 @@ async function updateStock(id, quantity) {
 }
 
 exports.createOrder = catchAsyncErrors(async (req, res, next) => {
-  const { orderItems, shippingInfo } = req.body;
-
-  const { itemsPrice, taxPrice, shippingFee, orderTotal } =
-    calPrices(orderItems);
+  const {
+    shippingInfo,
+    orderItems,
+    itemsPrice,
+    taxPrice,
+    shippingFee,
+    orderTotal,
+  } = req.body;
 
   const newOrder = await Order.create({
     user: req.user._id,
@@ -58,7 +40,7 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find().populate('User', 'username email');
+  const orders = await Order.find().populate('user', 'username email name');
 
   res.status(200).json({
     success: true,
@@ -68,8 +50,8 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
 
 exports.getOrderById = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate(
-    'User',
-    'username email'
+    'user',
+    'username email name'
   );
 
   if (!order) {
@@ -83,7 +65,9 @@ exports.getOrderById = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.myOrders = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.findById({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id }).sort({
+    createdAt: -1,
+  });
 
   res.status(200).json({
     success: true,
@@ -136,11 +120,11 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('Order not found with this ID', 404));
   }
 
-  if (order.orderStatus === 'Delivered') {
+  if (order.orderStatus === 'Delivering') {
     return next(new ErrorHandler('You already delivered this order', 400));
   }
 
-  if (order.orderStatus === 'Shipped') {
+  if (order.orderStatus === 'Delivered') {
     order.orderItems.forEach(async (o) => {
       await updateStock(o.product, o.quantity);
     });
@@ -152,7 +136,29 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
     order.deliveryAt = Date.now();
   }
 
-  await order.save;
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id);
+
+  if (!order) {
+    return next(new ErrorHandler('Order not found with this ID', 404));
+  }
+
+  if (order.orderStatus !== 'Processing') {
+    return next(
+      new ErrorHandler('You can only delete orders that are in process', 400)
+    );
+  }
+
+  await order.deleteOne({ _id: order._id });
 
   res.status(200).json({
     success: true,
