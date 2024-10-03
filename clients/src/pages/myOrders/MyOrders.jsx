@@ -51,7 +51,12 @@ const MyOrders = () => {
                   {orders?.map((o) => (
                     <tr key={o._id}>
                       <td>{o._id}</td>
-                      <td>{o.createdAt}</td>
+                      <td>
+                        {new Date(o.createdAt).toLocaleString('en-US', {
+                          dateStyle: 'short',
+                          timeStyle: 'short',
+                        })}
+                      </td>
                       <td>
                         {o.orderTotal.toLocaleString('en-US', {
                           style: 'currency',

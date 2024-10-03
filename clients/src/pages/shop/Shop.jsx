@@ -9,7 +9,6 @@ import { getCategory } from '../../actions/categoryAction';
 import Pagination from 'react-js-pagination';
 import { PiSlidersHorizontalLight } from 'react-icons/pi';
 import { IoCloseOutline } from 'react-icons/io5';
-import Slider from 'react-slider';
 import { toast } from 'sonner';
 import './Shop.scss';
 
@@ -33,7 +32,6 @@ const Shop = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState('');
-  const [price, setPrice] = useState([0, 2500]);
   const [sort, setSort] = useState('');
   const [keyword, setKeyword] = useState('');
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -57,7 +55,7 @@ const Shop = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error)
+      toast.error(error);
       dispatch(clearErrors());
     }
     dispatch(getProduct(keyword, currentPage, sort, category));
@@ -115,19 +113,6 @@ const Shop = () => {
                   </span>
                 </div>
                 <div className="panel__body">
-                  <div className="block-1">
-                    <div className="filter__title">Price Range</div>
-                    <h3 className="text-center">
-                      ${price[0]} - ${price[1]}
-                    </h3>
-                    <Slider
-                      className="slider"
-                      value={price}
-                      onChange={setPrice}
-                      min={0}
-                      max={2500}
-                    />
-                  </div>
                   <div className="block-2">
                     <div className="filter__title">Sort</div>
                     <ul className="filter__items">

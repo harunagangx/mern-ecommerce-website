@@ -3,8 +3,6 @@ const { isAuthenticatedUser, authorizeRole } = require('../middlewares/auth');
 const {
   createCategory,
   getAllCategory,
-  getCategoryById,
-  updateCategoryById,
   deleteCategoryById,
 } = require('../controllers/categoryController');
 
@@ -18,8 +16,6 @@ router
 
 router
   .route('/admin/category/:id')
-  .get(isAuthenticatedUser, authorizeRole('admin'), getCategoryById)
-  .put(isAuthenticatedUser, authorizeRole('admin'), updateCategoryById)
   .delete(isAuthenticatedUser, authorizeRole('admin'), deleteCategoryById);
 
 module.exports = router;

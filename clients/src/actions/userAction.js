@@ -80,6 +80,19 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
+export const logoutUser = () => async (dispatch) => {
+  try {
+    await axios.get('/api/v1/logout');
+
+    dispatch({ type: LOGOUT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: LOGOUT_FAIL,
+      error: error.response.data,
+    });
+  }
+};
+
 export const updateProfile = (userData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PROFILE_REQUEST });
@@ -96,19 +109,6 @@ export const updateProfile = (userData) => async (dispatch) => {
     dispatch({
       type: UPDATE_PROFILE_FAIL,
       payload: error.response.data,
-    });
-  }
-};
-
-export const logoutUser = () => async (dispatch) => {
-  try {
-    await axios.get('/api/v1/logout');
-
-    dispatch({ type: LOGOUT_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: LOGOUT_FAIL,
-      error: error.response.data,
     });
   }
 };

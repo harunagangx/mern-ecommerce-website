@@ -39,10 +39,25 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 // GET ALL PRODUCTS (ADMIN)
 exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find().populate('category');
+  const resultPerPage = 6;
+
+  const apiFeature = new ApiFeatures(
+    Product.find().populate("category").sort({ createdAt: -1 }),
+    req.query
+  );
+
+  let products = await apiFeature.query;
+
+  let productsCount = products.length;
+
+  apiFeature.pagination(resultPerPage);
+
+  products = await apiFeature.query.clone();
 
   res.status(201).json({
     success: true,
+    productsCount,
+    resultPerPage,
     products,
   });
 });

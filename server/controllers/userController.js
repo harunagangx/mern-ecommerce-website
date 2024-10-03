@@ -2,12 +2,9 @@ const User = require('../models/userModel');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 const sendCookie = require('../utils/sendCookie');
-const bcrypt = require('bcryptjs');
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
   const { username, email, password, name } = req.body;
-
-  console.log(req.body);
 
   if (!username || !email || !password) {
     return next(new ErrorHandler('Please fill all fields', 204));

@@ -5,10 +5,11 @@ const {
   getAllOrders,
   getOrderById,
   myOrders,
-  calculateTotalSales,
-  calculateTotalSalesByDate,
   updateOrder,
   deleteOrder,
+  calculateTotalSales,
+  calculateTotalSalesByDate,
+  calculateTotalSalesByMonth
 } = require('../controllers/orderController');
 
 const router = express.Router();
@@ -37,5 +38,9 @@ router
 router
   .route('/admin/order/sales-by-date')
   .get(isAuthenticatedUser, authorizeRole('admin'), calculateTotalSalesByDate);
+
+router
+  .route('/admin/order/sales-by-month')
+  .get(isAuthenticatedUser, authorizeRole('admin'), calculateTotalSalesByMonth);
 
 module.exports = router;

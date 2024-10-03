@@ -3,14 +3,6 @@ const Product = require('../models/productModel');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
-async function updateStock(id, quantity) {
-  const product = await Product.findById(id);
-
-  product.stock -= quantity;
-
-  await product.save();
-}
-
 exports.createOrder = catchAsyncErrors(async (req, res, next) => {
   const {
     shippingInfo,
@@ -40,7 +32,9 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find().populate('user', 'username email name');
+  const orders = await Order.find()
+    .populate('user', 'username email name')
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     success: true,
@@ -72,6 +66,66 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     orders,
+  });
+});
+
+exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new ErrorHandler('Order not found with this ID', 404));
+  }
+
+  if (order.orderStatus === 'Delivered') {
+    return next(new ErrorHandler('You already delivered this order', 400));
+  }
+
+  if (order.orderStatus === 'Delivered') {
+    order.orderItems.forEach(async (o) => {
+      await updateStock(o.product, o.quantity);
+    });
+  }
+
+  order.orderStatus = req.body.orderStatus;
+
+  if (req.body.status === 'Delivered') {
+    order.deliveryAt = Date.now();
+  }
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+async function updateStock(id, quantity) {
+  const product = await Product.findById(id);
+
+  product.stock -= quantity;
+
+  await product.save({ validateBeforeSave: false });
+}
+
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id);
+
+  if (!order) {
+    return next(new ErrorHandler('Order not found with this ID', 404));
+  }
+
+  if (order.orderStatus !== 'Processing') {
+    return next(
+      new ErrorHandler('You can only delete orders that are in process', 400)
+    );
+  }
+
+  await order.deleteOne({ _id: order._id });
+
+  res.status(200).json({
+    success: true,
   });
 });
 
@@ -113,54 +167,25 @@ exports.calculateTotalSalesByDate = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new ErrorHandler('Order not found with this ID', 404));
-  }
-
-  if (order.orderStatus === 'Delivering') {
-    return next(new ErrorHandler('You already delivered this order', 400));
-  }
-
-  if (order.orderStatus === 'Delivered') {
-    order.orderItems.forEach(async (o) => {
-      await updateStock(o.product, o.quantity);
-    });
-  }
-
-  order.orderStatus = req.body.orderStatus;
-
-  if (req.body.status === 'Delivered') {
-    order.deliveryAt = Date.now();
-  }
-
-  await order.save();
+exports.calculateTotalSalesByMonth = catchAsyncErrors(async (req, res, next) => {
+  const salesByMonth = await Order.aggregate([
+    {
+      $match: {
+        isPaid: true,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: '%Y-%m', date: '$paidAt' },
+        },
+        totalSales: { $sum: '$itemsPrice' },
+      },
+    },
+  ]);
 
   res.status(200).json({
     success: true,
-  });
-});
-
-exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
-  const { id } = req.params;
-
-  const order = await Order.findById(id);
-
-  if (!order) {
-    return next(new ErrorHandler('Order not found with this ID', 404));
-  }
-
-  if (order.orderStatus !== 'Processing') {
-    return next(
-      new ErrorHandler('You can only delete orders that are in process', 400)
-    );
-  }
-
-  await order.deleteOne({ _id: order._id });
-
-  res.status(200).json({
-    success: true,
+    salesByMonth,
   });
 });

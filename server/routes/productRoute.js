@@ -16,7 +16,9 @@ router.route('/products').get(getAllProducts);
 
 router.route('/product/:id').get(getProductById);
 
-router.route('/admin/products').get(getAdminProducts);
+router
+  .route('/admin/products')
+  .get(isAuthenticatedUser, authorizeRole('admin'), getAdminProducts);
 
 router
   .route('/admin/product')

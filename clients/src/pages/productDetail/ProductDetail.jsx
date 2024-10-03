@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetail, clearErrors } from '../../actions/productAction';
 import { addItemToCart } from '../../actions/cartAction';
 import Loader from '../../components/loader/Loader';
-import './ProductDetail.scss';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
+import './ProductDetail.scss';
 
 const ProductDetail = () => {
   const { id } = useParams();

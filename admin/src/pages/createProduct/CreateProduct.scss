@@ -1,0 +1,44 @@
+.createProduct__container {
+  form {
+    width: 100%;
+    padding: 30px 100px;
+
+    img {
+      object-fit: cover;
+      width: 30vw;
+    }
+
+    label {
+      font-size: 1.1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #000;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 14px;
+
+      option {
+        padding: 8px 10px;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+    }
+
+    .submit__btn {
+      width: 150px;
+      border: none;
+      background: var(--primary-color);
+      color: var(--light-color);
+    }
+  }
+}

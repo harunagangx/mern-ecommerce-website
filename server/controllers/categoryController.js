@@ -3,56 +3,20 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 
 exports.createCategory = catchAsyncErrors(async (req, res, next) => {
-  const { name } = req.body;
-
-  const category = await Category.findOne({ name });
-
-  if (category) {
-    return next(new ErrorHandler('category already exists', 404));
-  }
-
-  const newCategory = await Category.create({ name: name });
+  const category = await Category.create(req.body);
 
   res.status(201).json({
-    success: true,
-    newCategory,
-  });
-});
-
-exports.getAllCategory = catchAsyncErrors(async (req, res, next) => {
-  const categories = await Category.find();
-
-  res.status(200).json({
-    success: true,
-    categories,
-  });
-});
-
-exports.getCategoryById = catchAsyncErrors(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
-
-  if (!category) {
-    return next(new ErrorHandler('category does not exist', 404));
-  }
-
-  res.status(200).json({
     success: true,
     category,
   });
 });
 
-exports.updateCategoryById = catchAsyncErrors(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
-
-  if (!category) {
-    return next(new ErrorHandler('category does not exist', 404));
-  }
-
-  await Category.findByIdAndUpdate(req.params.id, req.body);
+exports.getAllCategory = catchAsyncErrors(async (req, res, next) => {
+  const categories = await Category.find().sort({ createdAt: -1 });
 
   res.status(200).json({
     success: true,
-    message: 'update successfully',
+    categories,
   });
 });
 

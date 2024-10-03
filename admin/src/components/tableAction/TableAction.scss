@@ -1,0 +1,32 @@
+.action-dropdown__btn {
+  color: var(--text-color-inverted);
+  position: relative;
+
+  .action-dropdown__menu {
+    position: absolute;
+    top: 100%;
+    right: 50%;
+    transform: translateX(50%);
+    height: auto;
+    min-width: 100px;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 1px 4px 0px;
+    background-color: var(--secondary-color);
+    padding: 8px 7px;
+    z-index: 1;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-inverted);
+    text-align: left;
+
+  
+
+    .dropdown__menu-link {
+      color: var(--text-color-inverted);
+      transition: var(--default-transition);
+      padding: 8px 10px;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

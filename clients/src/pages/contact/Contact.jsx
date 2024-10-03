@@ -89,10 +89,10 @@ const Contact = () => {
                   </div>
                   <div className="input__wrapper">
                     <label>Messages</label>
-                    <textarea type="text" rows="5" cols="30"/>
+                    <textarea type="text" rows="5" cols="30" />
                   </div>
                   <div className="submit-btn">
-                    <button type='submit'>Submit</button>
+                    <button type="submit">Submit</button>
                   </div>
                 </div>
               </div>

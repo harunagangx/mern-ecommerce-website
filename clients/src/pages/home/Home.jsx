@@ -2,7 +2,6 @@ import React from 'react';
 import HeroSection from '../../components/heroSection/HeroSection';
 import HomeImg1 from '../../assets/homeImg1.png';
 import HomeImg2 from '../../assets/homeImg2.png';
-import ProductCard from '../../components/productCard/ProductCard';
 import { Link } from 'react-router-dom';
 
 import './Home.scss';

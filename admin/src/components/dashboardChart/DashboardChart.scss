@@ -1,0 +1,29 @@
+.dashboard__chart {
+  background-color: var(--secondary-color);
+  padding: 16px 16px 10px 16px;
+  border-radius: 5px;
+  box-shadow: var(--light-shadow);
+  margin-top: 12px;
+  position: relative;
+
+  .chart__title {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-color-inverted);
+  }
+
+  .data-value {
+    font-size: 24px;
+    color: var(--xl-text-color);
+    font-weight: 700;
+  }
+
+  .data-text {
+    color: var(--green-color);
+  }
+
+  .chart__wrapper {
+    width: 100%;
+  }
+}

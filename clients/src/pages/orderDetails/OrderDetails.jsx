@@ -20,7 +20,9 @@ const OrderDetails = () => {
   const { error: deleteError } = useSelector((state) => state.deleteOrder);
 
   const handleCancelOrder = () => {
-    dispatch(deleteOrder(id));
+    if (window.confirm('Do you want to cancel this order')) {
+      dispatch(deleteOrder(id));
+    }
 
     if (deleteError) {
       toast.error(deleteError);

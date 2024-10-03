@@ -5,7 +5,6 @@ import { updateProfile, clearErrors, loadUser } from '../../actions/userAction';
 import { UPDATE_PROFILE_RESET } from '../../constants/userConstants';
 import { toast } from 'sonner';
 import './UpdateUserProfileWidget.scss';
-import { Fragment } from 'react';
 import Loader from '../loader/Loader';
 
 const UpdateUserProfileWidget = ({ handleCloseWidget }) => {

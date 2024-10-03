@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../../actions/orderAction';
 import { clearCartItems } from '../../actions/cartAction';
+import { toast } from 'sonner';
 import Loader from '../../components/loader/Loader';
 import './ConfirmOrder.scss';
-import { toast } from 'sonner';
 
 const ConfirmOrder = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ConfirmOrder = () => {
 
   const shippingFee = subtotal > 7000 ? 0 : 100;
 
-  const tax = subtotal * 0.18;
+  const tax = (subtotal * 0.18).toFixed(2);
 
   const orderTotal = subtotal + tax + shippingFee;
 
@@ -66,7 +66,7 @@ const ConfirmOrder = () => {
               <div className="confirmShippingAreaBox">
                 <div>
                   <p className="fw-bold">
-                    Name: <span className="fw-normal">{user.name}</span>
+                    Name: <span className="fw-normal">{user && user.name}</span>
                   </p>
                 </div>
                 <div>
