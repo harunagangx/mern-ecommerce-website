@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <Fragment>
       {loading && <Loader />}
-      <div className="login-page__wrapper d-flex gap-">
+      <div className="login-page__wrapper d-flex">
         <div className="form__wrapper">
           <h1 className="text-center">Sign in</h1>
           <form onSubmit={handleLogin}>
