@@ -1,15 +1,11 @@
-import React, { Fragment, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createOrder } from '../../actions/orderAction';
-import { clearCartItems } from '../../actions/cartAction';
-import { toast } from 'sonner';
 import Loader from '../../components/loader/Loader';
 import './ConfirmOrder.scss';
 
 const ConfirmOrder = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { loading, user } = useSelector((state) => state.user);
@@ -21,37 +17,23 @@ const ConfirmOrder = () => {
 
   const shippingFee = subtotal > 7000 ? 0 : 100;
 
-  const tax = (subtotal * 0.18).toFixed(2);
+  const tax = subtotal * 0.18;
 
   const orderTotal = subtotal + tax + shippingFee;
 
   const address = `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.country}`;
 
-  const placeOrderHandler = () => {
-    const orderData = {
-      shippingInfo,
-      orderItems: cartItems,
-      itemsPrice: subtotal,
-      taxPrice: tax,
-      shippingFee: shippingFee,
-      orderTotal: orderTotal,
+  const proceedToPayment = () => {
+    const data = {
+      subtotal,
+      shippingFee,
+      tax,
+      orderTotal,
     };
 
-    dispatch(createOrder(orderData));
-    dispatch(clearCartItems());
-    navigate('/my-orders');
-    toast.success('place order successfully');
+    sessionStorage.setItem('orderInfo', JSON.stringify(data));
 
-    // const data = {
-    //   subtotal,
-    //   shippingFee,
-    //   tax,
-    //   totalPrice,
-    // };
-
-    // sessionStorage.setItem('orderInfo', JSON.stringify(data));
-
-    // navigate('/process/payment');
+    navigate('/process/payment');
   };
 
   return (
@@ -145,7 +127,7 @@ const ConfirmOrder = () => {
                   </span>
                 </div>
 
-                <button onClick={placeOrderHandler}>Place Order</button>
+                <button onClick={proceedToPayment}>Process To Payment</button>
               </div>
             </div>
           </div>

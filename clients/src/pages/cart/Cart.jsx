@@ -59,10 +59,7 @@ const Cart = () => {
                           0
                         )}`}</p>
                       </div>
-                      <div className="d-flex justify-content-between">
-                        <p>Shipping</p>
-                        <p>Free</p>
-                      </div>
+
                       <div className="d-flex align-items-center justify-content-between">
                         <p>Total</p>
                         <p>

@@ -12,7 +12,7 @@ root.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
-      <Toaster richColors  toastOptions={{ className: 'toast_style' }} />
+      <Toaster richColors toastOptions={{ className: 'toast_style' }} />
     </BrowserRouter>
   </Provider>
 );

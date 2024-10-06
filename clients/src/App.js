@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import Home from './pages/home/Home';
@@ -15,14 +16,26 @@ import Shipping from './pages/shipping/Shipping';
 import MyOrders from './pages/myOrders/MyOrders';
 import OrderDetails from './pages/orderDetails/OrderDetails';
 import ConfirmOrder from './pages/confirmOrder/ConfirmOrder';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import Payment from './pages/payment/Payment';
+import SuccessPayment from './pages/successPayment/SuccessPayment';
+import axios from 'axios';
 import { loadUser } from './actions/userAction';
-import './App.scss';
 import { useDispatch } from 'react-redux';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import './App.scss';
 
 function App() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+
+  const [stripeApiKey, setStripeApiKey] = useState('');
+
+  async function getStripeApiKey() {
+    const { data } = await axios.get('/api/v1/stripe-api-key');
+
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   useEffect(() => {
     window.scrollTo({
@@ -34,11 +47,29 @@ function App() {
 
   useEffect(() => {
     dispatch(loadUser());
+
+    getStripeApiKey();
   }, [dispatch]);
 
   return (
     <>
       <Header />
+
+      {stripeApiKey && (
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Routes>
+            <Route
+              path="/process/payment"
+              element={
+                <PrivateRoute>
+                  <Payment />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
@@ -47,6 +78,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/success" element={<SuccessPayment />} />
 
         <Route
           path="/cart"
