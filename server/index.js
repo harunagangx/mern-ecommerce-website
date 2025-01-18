@@ -16,7 +16,13 @@ dotenv.config({ path: './config/config.env' });
 
 connectDb();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', "HEAD", "OPTIONS"],
+  })
+);
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -40,9 +46,10 @@ app.use('/api/v1', paymentRoute);
 __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 
+
 app.use(errorMiddleware);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

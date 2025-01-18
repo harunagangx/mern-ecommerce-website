@@ -29,7 +29,12 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
     role: req.body.role,
   });
 
-  sendCookie(newUser, 201, res);
+  sendCookie(newUser, res);
+
+  res.status(201).json({
+    success: true,
+    newUser,
+  });
 });
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
@@ -49,7 +54,12 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('password does not match'));
   }
 
-  sendCookie(user, 201, res);
+  sendCookie(user, res);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
 
 exports.logoutUser = catchAsyncErrors(async (req, res, next) => {

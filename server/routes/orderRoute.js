@@ -21,15 +21,13 @@ router.route('/order/me').get(isAuthenticatedUser, myOrders);
 router
   .route('/order/:id')
   .get(getOrderById)
+  .put(isAuthenticatedUser, updateOrder)
   .delete(isAuthenticatedUser, deleteOrder);
 
 router
   .route('/admin/orders')
   .get(isAuthenticatedUser, authorizeRole('admin'), getAllOrders);
 
-router
-  .route('/admin/order/:id')
-  .put(isAuthenticatedUser, authorizeRole('admin'), updateOrder);
 
 router
   .route('/admin/order/total-sales')
