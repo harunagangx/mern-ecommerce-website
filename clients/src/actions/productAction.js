@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import {server_url} from '../constants/index';
 import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
@@ -16,10 +16,10 @@ export const getProduct =
     try {
       dispatch({ type: ALL_PRODUCT_REQUEST });
 
-      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&sort=${sort}`;
+      let link = `${server_url}/api/v1/products?keyword=${keyword}&page=${currentPage}&sort=${sort}`;
 
       if (category) {
-        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&category=${category}`;
+        link = `${server_url}/api/v1/products?keyword=${keyword}&page=${currentPage}&category=${category}`;
       }
 
       const { data } = await axios.get(link);
@@ -40,7 +40,7 @@ export const getProductDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAIL_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/product/${id}`);
+    const { data } = await axios.get(`${server_url}/api/v1/product/${id}`);
 
     dispatch({
       type: PRODUCT_DETAIL_SUCCESS,

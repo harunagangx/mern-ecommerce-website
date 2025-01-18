@@ -8,6 +8,10 @@ import {
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
+  UPDATE_ORDER_REQUEST,
+  UPDATE_ORDER_SUCCESS,
+  UPDATE_ORDER_FAIL,
+  UPDATE_ORDER_RESET,
   DELETE_ORDER_REQUEST,
   DELETE_ORDER_SUCCESS,
   DELETE_ORDER_FAIL,
@@ -93,6 +97,38 @@ export const orderDetailsReducer = (state = { order: {} }, action) => {
       return state;
   }
 };
+
+export const updateOrderReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ORDER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UPDATE_ORDER_SUCCESS:
+      return {
+        loading: false,
+        isUpdated: action.payload,
+      };
+    case UPDATE_ORDER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case UPDATE_ORDER_RESET:
+      return {
+        ...state,
+        isUpdated: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+}
 
 export const deleteOrderReducer = (state = {}, action) => {
   switch (action.type) {

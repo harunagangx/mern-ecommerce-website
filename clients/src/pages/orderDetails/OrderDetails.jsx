@@ -1,13 +1,10 @@
 import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getOrderDetail,
-  deleteOrder,
-  clearErrors,
-} from '../../actions/orderAction';
+import { getOrderDetail, updateOrder, deleteOrder, clearErrors } from '../../actions/orderAction';
 import { toast } from 'sonner';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
+import { server_url } from '../../constants/index';
 import './OrderDetails.scss';
 
 const OrderDetails = () => {
@@ -18,6 +15,20 @@ const OrderDetails = () => {
   const { loading, error, order } = useSelector((state) => state.orderDetails);
 
   const { error: deleteError } = useSelector((state) => state.deleteOrder);
+
+  const { error: updateError } = useSelector((state) => state.updateOrder);
+
+  const handleReceivedOrder = (e) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+
+    myForm.append('orderStatus', 'Delivered');
+
+    dispatch(updateOrder(id, myForm));
+    navigate('/my-orders');
+    window.location.reload();
+  };
 
   const handleCancelOrder = () => {
     if (window.confirm('Do you want to cancel this order')) {
@@ -39,8 +50,13 @@ const OrderDetails = () => {
       dispatch(clearErrors());
     }
 
+    if (updateError) {
+      toast.error(updateError);
+      dispatch(clearErrors());
+    }
+
     dispatch(getOrderDetail(id));
-  }, [dispatch, error, id]);
+  }, [dispatch, error, id, updateError]);
 
   return (
     <Fragment>
@@ -57,10 +73,7 @@ const OrderDetails = () => {
                 </div>
                 <div>
                   <p className="fw-bold">
-                    Name:{' '}
-                    <span className="fw-normal">
-                      {order.user && order.user.name}
-                    </span>
+                    Name: <span className="fw-normal">{order.user && order.user.name}</span>
                   </p>
                 </div>
                 <div>
@@ -82,8 +95,7 @@ const OrderDetails = () => {
                 </div>
                 <div className="fw-bold">
                   <p>
-                    Order Status:{' '}
-                    <span className="fw-normal">{order.orderStatus}</span>
+                    Order Status: <span className="fw-normal">{order.orderStatus}</span>
                   </p>
                 </div>
               </div>
@@ -94,11 +106,10 @@ const OrderDetails = () => {
                   {order.orderItems &&
                     order.orderItems.map((item) => (
                       <div key={item.product}>
-                        <img src={item.image} alt="Product" />
+                        <img src={`${server_url}/${item.image}`} alt="Product" />
                         <h4>{item.name}</h4>
                         <span className="pe-3">
-                          ${item.price} X {item.quantity} ={' '}
-                          <b>${item.price * item.quantity}</b>
+                          ${item.price} X {item.quantity} = <b>${item.price * item.quantity}</b>
                         </span>
                       </div>
                     ))}
@@ -131,10 +142,16 @@ const OrderDetails = () => {
                   <span>${order.orderTotal}</span>
                 </div>
 
-                {order.orderStatus === 'Processing' ? (
+                {order.orderStatus === 'Processing' && (
                   <button onClick={handleCancelOrder}>Cancel Order</button>
-                ) : (
-                  <button disabled>Cancel Order</button>
+                )}
+
+                {order.orderStatus === 'Delivering' && (
+                  <button onClick={handleReceivedOrder}>I have received the order</button>
+                )}
+
+                {order.orderStatus === 'Delivered' && (
+                  <button disabled>I have received the order</button>
                 )}
               </div>
             </div>

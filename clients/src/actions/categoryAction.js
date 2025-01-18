@@ -4,12 +4,13 @@ import {
   ALL_CATEGORY_SUCCESS,
   ALL_CATEGORY_FAIL,
 } from '../constants/categoryConstants';
+import { server_url } from '../constants';
 
 export const getCategory = () => async (dispatch) => {
   try {
     dispatch({ type: ALL_CATEGORY_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/categories`);
+    const { data } = await axios.get(`${server_url}/api/v1/categories`);
 
     dispatch({
       type: ALL_CATEGORY_SUCCESS,

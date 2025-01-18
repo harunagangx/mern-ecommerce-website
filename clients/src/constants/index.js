@@ -1,0 +1,1 @@
+export const server_url = 'https://mern-ecommerce-website-api.onrender.com';

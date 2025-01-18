@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
+import { server_url } from '../../constants';
 import './ConfirmOrder.scss';
 
 const ConfirmOrder = () => {
@@ -70,11 +71,10 @@ const ConfirmOrder = () => {
                   {cartItems &&
                     cartItems.map((item) => (
                       <div key={item.product}>
-                        <img src={item.image} alt="Product" />
+                        <img src={`${server_url}/${item.image}`} alt="Product" />
                         <h4>{item.name}</h4>
                         <span className="pe-3">
-                          ${item.price} X {item.quantity} ={' '}
-                          <b>${item.price * item.quantity}</b>
+                          ${item.price} X {item.quantity} = <b>${item.price * item.quantity}</b>
                         </span>
                       </div>
                     ))}

@@ -2,6 +2,7 @@ import React from 'react';
 import { CiCircleRemove } from 'react-icons/ci';
 import { addItemToCart, removeItemFromCart } from '../../actions/cartAction';
 import { useDispatch } from 'react-redux';
+import { server_url } from '../../constants';
 
 const CartItemCard = ({ item }) => {
   const dispatch = useDispatch();
@@ -29,22 +30,14 @@ const CartItemCard = ({ item }) => {
   return (
     <tr key={item.product}>
       <td>
-        <img src={item.image} alt="" />
+        <img src={`${server_url}/${item.image}`} alt="" />
         <span>{item.name}</span>
       </td>
       <td>${item.price}</td>
       <td>
-        <button onClick={() => decreaseQuantity(item.product, item.quantity)}>
-          -
-        </button>
+        <button onClick={() => decreaseQuantity(item.product, item.quantity)}>-</button>
         <input type="number" value={item.quantity} readOnly />
-        <button
-          onClick={() =>
-            increaseQuantity(item.product, item.quantity, item.stock)
-          }
-        >
-          +
-        </button>
+        <button onClick={() => increaseQuantity(item.product, item.quantity, item.stock)}>+</button>
       </td>
       <td>${item.price * item.quantity}</td>
       <td>

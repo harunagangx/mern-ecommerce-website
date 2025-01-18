@@ -24,6 +24,10 @@ const nav_links = [
     display: 'About Us',
   },
   {
+    path: "my-orders",
+    display: "My Orders",
+  },
+  {
     path: 'contact',
     display: 'Contact Us',
   },

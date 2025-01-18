@@ -7,6 +7,7 @@ import { addItemToCart } from '../../actions/cartAction';
 import Loader from '../../components/loader/Loader';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
+import {server_url} from '../../constants/index';
 import './ProductDetail.scss';
 
 const ProductDetail = () => {
@@ -58,7 +59,7 @@ const ProductDetail = () => {
             <div className="container">
               <div className="row">
                 <div className="col-6">
-                  <img src={product.image} alt={product.name} />
+                  <img src={`${server_url}/${product.image}`} alt={product.name} />
                 </div>
                 <div className="col-6">
                   <div className="product__details">
@@ -66,8 +67,8 @@ const ProductDetail = () => {
                       <h2>{product.name}</h2>
                       <p>Product code: {product._id}</p>
                       <p className="fst-italic">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consequuntur iure quas illo voluptates labore tempore!
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur iure
+                        quas illo voluptates labore tempore!
                       </p>
                     </div>
                     <div className="detailBlock-2">
