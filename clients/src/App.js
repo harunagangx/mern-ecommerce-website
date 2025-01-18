@@ -59,7 +59,7 @@ function App() {
         <Elements stripe={loadStripe(stripeApiKey)}>
           <Routes>
             <Route
-              path="/process/payment"
+              path="/payment"
               element={
                 <PrivateRoute>
                   <Payment />

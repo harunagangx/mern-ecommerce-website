@@ -25,6 +25,7 @@ export const createOrder = (order) => async (dispatch) => {
 
     const config = {
       headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
     };
 
     const { data } = await axios.post(`${server_url}/api/v1/order/`, order, config);
@@ -45,7 +46,7 @@ export const myOrders = () => async (dispatch) => {
   try {
     dispatch({ type: MY_ORDER_REQUEST });
 
-    const { data } = await axios.get(`${server_url}/api/v1/order/me`);
+    const { data } = await axios.get(`${server_url}/api/v1/order/me`, { withCredentials: true });
 
     dispatch({
       type: MY_ORDER_SUCCESS,
@@ -80,6 +81,7 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
 
     const config = {
       headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
     };
 
     const { data } = await axios.put(`${server_url}/api/v1/order/${id}`, orderData, config);
