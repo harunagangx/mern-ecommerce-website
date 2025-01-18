@@ -11,10 +11,7 @@ const ConfirmOrder = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { loading, user } = useSelector((state) => state.user);
 
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
+  const subtotal = cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
   const shippingFee = subtotal > 7000 ? 0 : 100;
 

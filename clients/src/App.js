@@ -23,6 +23,7 @@ import { loadUser } from './actions/userAction';
 import { useDispatch } from 'react-redux';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { server_url } from './constants/index';
 import './App.scss';
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
   const [stripeApiKey, setStripeApiKey] = useState('');
 
   async function getStripeApiKey() {
-    const { data } = await axios.get('/api/v1/stripe-api-key');
+    const { data } = await axios.get(`${server_url}/api/v1/stripe-api-key`);
 
     setStripeApiKey(data.stripeApiKey);
   }
@@ -59,7 +60,7 @@ function App() {
         <Elements stripe={loadStripe(stripeApiKey)}>
           <Routes>
             <Route
-              path="/payment"
+              path="/process/payment"
               element={
                 <PrivateRoute>
                   <Payment />
