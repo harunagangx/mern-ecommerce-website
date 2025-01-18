@@ -15,6 +15,7 @@ import { ImCreditCard } from 'react-icons/im';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { SlCalender } from 'react-icons/sl';
 import axios from 'axios';
+import { server_url } from '../../constants/index';
 import './Payment.scss';
 
 const Payment = () => {
@@ -55,10 +56,11 @@ const Payment = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.post(
-        '/api/v1/payment/process',
+        `${server_url}/api/v1/payment/process`,
         paymentData,
         config
       );
