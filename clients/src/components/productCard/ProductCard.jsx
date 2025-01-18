@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
     <div className="col-md-6 col-lg-4 pt-2">
       <Link className="product-card__wrapper" to={`/product/${product._id}`}>
         <div className="product-card__img">
-          <img src={`$${server_url}/${product.image}`} alt={product.name} />
+          <img src={`${server_url}/${product.image}`} alt={product.name} />
         </div>
         <div className="product-card__context">
           <div className="product-card__title">
