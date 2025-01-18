@@ -22,7 +22,7 @@ export const loginUser = (userId, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_USER_REQUEST });
 
-    const config = { headers: { 'Content-Type': 'application/json' } };
+    const config = { headers: { 'Content-Type': 'application/json' }, withCredentials: true };
 
     const { data } = await axios.post(`${server_url}/api/v1/login`, { userId, password }, config);
 
@@ -42,7 +42,7 @@ export const registerUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
 
-    const config = { headers: { 'Content-Type': 'application/json' } };
+    const config = { headers: { 'Content-Type': 'application/json' }, withCredentials: true };
 
     const { data } = await axios.post(`${server_url}/api/v1/register`, userData, config);
 
