@@ -7,16 +7,16 @@ import { addItemToCart } from '../../actions/cartAction';
 import Loader from '../../components/loader/Loader';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import {server_url} from '../../constants/index';
+import { server_url } from '../../constants/index';
 import './ProductDetail.scss';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { product, loading, error } = useSelector(
-    (state) => state.productDetails
-  );
+  const { product, loading, error } = useSelector((state) => state.productDetails);
+
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -36,13 +36,17 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    dispatch(addItemToCart(id, quantity));
-    toast.success('added to cart');
+    if (!isAuthenticated) {
+      return toast.error('Please login to add to cart');
+    } else {
+      dispatch(addItemToCart(id, quantity));
+      toast.success('added to cart');
+    }
   };
 
   useEffect(() => {
     if (error) {
-      toast.error(error)
+      toast.error(error);
       dispatch(clearErrors());
     }
     dispatch(getProductDetail(id));
